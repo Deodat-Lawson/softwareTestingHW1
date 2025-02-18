@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="hw1-task1 completed">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/StringUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" afterDir="false" />
+    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="hw1-added task two">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/StringUtilsFixed.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,52 +59,52 @@
       <recent name="C:\Users\timot\IdeaProjects\software-testing-hw1\libs" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.StringUtilsTest.testCompress_singleChar">
-    <configuration name="StringUtilsTest.testCompress_emptyString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.StringUtilsTest.testStringToInteger_emptyString">
+    <configuration name="StringUtilsTest.testStringToInteger_allSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testCompress_emptyString" />
+      <option name="METHOD_NAME" value="testStringToInteger_allSpaces" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testCompress_mixedNoAdvantage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_emptyString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testCompress_mixedNoAdvantage" />
+      <option name="METHOD_NAME" value="testStringToInteger_emptyString" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testCompress_repetition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_leadingSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testCompress_repetition" />
+      <option name="METHOD_NAME" value="testStringToInteger_leadingSpaces" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testCompress_singleChar" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_signThenInvalidCharacter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testCompress_singleChar" />
+      <option name="METHOD_NAME" value="testStringToInteger_signThenInvalidCharacter" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testCompress_typicalExample" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_simpleNegative" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testCompress_typicalExample" />
+      <option name="METHOD_NAME" value="testStringToInteger_simpleNegative" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -112,11 +112,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.StringUtilsTest.testCompress_singleChar" />
-        <item itemvalue="JUnit.StringUtilsTest.testCompress_mixedNoAdvantage" />
-        <item itemvalue="JUnit.StringUtilsTest.testCompress_typicalExample" />
-        <item itemvalue="JUnit.StringUtilsTest.testCompress_repetition" />
-        <item itemvalue="JUnit.StringUtilsTest.testCompress_emptyString" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_emptyString" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_allSpaces" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_signThenInvalidCharacter" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_leadingSpaces" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_simpleNegative" />
       </list>
     </recent_temporary>
   </component>
@@ -129,7 +129,7 @@
       <option name="presentableId" value="Default" />
       <updated>1739645161078</updated>
       <workItem from="1739645162094" duration="9366000" />
-      <workItem from="1739718986728" duration="7875000" />
+      <workItem from="1739718986728" duration="14840000" />
     </task>
     <task id="LOCAL-00001" summary="hw1-task1 completed">
       <option name="closed" value="true" />
@@ -139,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739724325383</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="hw1-added task two">
+      <option name="closed" value="true" />
+      <created>1739731923433</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739731923433</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,7 +155,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="hw1-task1 completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="hw1-task1 completed" />
+    <MESSAGE value="hw1-added task two" />
+    <option name="LAST_COMMIT_MESSAGE" value="hw1-added task two" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -169,6 +178,11 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/StringUtilsFixed.java</url>
+          <line>117</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

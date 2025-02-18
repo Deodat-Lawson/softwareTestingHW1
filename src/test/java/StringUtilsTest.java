@@ -3,21 +3,29 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.StringUtils;
+import org.example.StringUtilsFixed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class StringUtilsTest {
 
-  private StringUtils su;
+  private StringUtilsFixed su;
 
   @BeforeEach
   void setUp() {
-    su = new StringUtils();
+    su = new StringUtilsFixed();
   }
 
   // --------------------------------------------------------
   // 1. TESTS FOR compress(String str)
   // --------------------------------------------------------
+  ;
+
+  /**
+   * Test: null input.
+   * Branch covered: The very first check in compress() that throws a NullPointerException
+   * when the input string is null.
+   */
   @Test
   void testCompress_nullInput_throwsNullPointerException() {
     assertThrows(NullPointerException.class, () -> {
@@ -25,95 +33,187 @@ class StringUtilsTest {
     });
   }
 
+  /**
+   * Test: empty string input.
+   * Branch covered:
+   * - When the input string is empty, the for-loop is never entered.
+   * - The final return branch is executed where the empty compressed string is returned.
+   */
   @Test
-  void testCompress_emptyString() {
+  void testCompress_emptyString_returnsEmptyString() {
     String input = "";
-    // For-loop never enters => compressed = "", length check => return ""
     String result = su.compress(input);
     assertEquals("", result);
   }
 
+
+  /**
+   * Test: single character.
+   * Branch covered:
+   * - The loop runs exactly once, and the if condition is true because the current index is the last character.
+   * - Final branch: Since the compressed result ("a1") is not shorter than the original ("a"),
+   *   the original string is returned.
+   *
+   * Fault: The code goes into the loop, but it is unable to check the if condition because the index is out of
+   * bounds. The code should check if it is the last character before incrementing the count.
+   */
   @Test
-  void testCompress_singleChar() {
+  void testCompress_singleChar_returnsOriginalString() {
     String input = "a";
     String result = su.compress(input);
     assertEquals("a", result);
   }
 
+  /**
+   * Test: repeated characters where compression is not beneficial.
+   * Branch covered:
+   * - For input "aa": For the first character (i=0), the if condition is false because the next character is the same.
+   * - For the second character (i=1), the if condition is true because it is the last character.
+   * - Final branch: Since the compressed result ("a2") is not strictly shorter than "aa", the original is returned.
+   *
+   * Fault: The code doesn't return the original string when the compressed string is not strictly shorter.
+   */
   @Test
-  void testCompress_repetition() {
+  void testCompress_repetition_returnsOriginalStringIfCompressionNotBeneficial() {
     String input = "aa";
     String result = su.compress(input);
     assertEquals("aa", result,
-        "Depending on the final comparison, it could return 'aa' or 'a2'.");
+        "Should return original string when the compressed string is not strictly shorter");
   }
 
+  /**
+   * Test: mixed characters with no compression advantage.
+   * Branch covered:
+   * - For input "ab": For i=0, the if condition is true because the next character is different.
+   * - For i=1, the condition is true because it is the last character.
+   * - Final branch: The compressed result ("a1b1") is longer than the original, so the original string is returned.
+   */
   @Test
-  void testCompress_mixedNoAdvantage() {
+  void testCompress_mixedNoAdvantage_returnsOriginalString() {
     String input = "ab";
     String result = su.compress(input);
     assertEquals("ab", result);
   }
 
+  /**
+   * Test: typical example.
+   * Branch covered:
+   * - For input "aabcccccaaa": Multiple iterations occur.
+   * - Both branches of the loop's if-statement are exercised:
+   *     * When the next character is the same (if condition false)
+   *     * When the run of identical characters ends (if condition true, either because of a differing next char or end-of-string).
+   * - Final branch: The compressed string ("a2b1c5a3") is shorter than the original, so the compressed string is returned.
+   */
   @Test
-  void testCompress_typicalExample() {
+  void testCompress_typicalExample_returnsCompressedString() {
     String input = "aabcccccaaa";
-    // By the javadoc example => "a2b1c5a3" => length 8 < 11 => returns "a2b1c5a3"
     String result = su.compress(input);
     assertEquals("a2b1c5a3", result);
+  }
+
+  /**
+   * Test: intermediate case with a mix of single and repeated characters.
+   * Branch covered:
+   * - For input "abb":
+   *     * At index 0: if condition is true because 'a' != 'b'.
+   *     * At index 1: if condition is false because 'b' equals the next 'b'.
+   *     * At index 2: if condition is true because it is the last character.
+   * - Final branch: The compressed result ("a1b2") is not shorter than the original ("abb"), so the original string is returned.
+   */
+  @Test
+  void testCompress_intermediateCase_returnsOriginalString() {
+    String input = "abb";
+    String result = su.compress(input);
+    assertEquals("abb", result);
   }
 
   // --------------------------------------------------------
   // 2. TESTS FOR isPermutation(String str1, String str2)
   // --------------------------------------------------------
+  /**
+   * Test: One or both input strings are null.
+   * Branches covered:
+   * - Implicit null check when calling str1.length() or str2.length() (resulting in a NullPointerException).
+   */
   @Test
   void testIsPermutation_nullInput_throwsNullPointerException() {
+    // First parameter is null.
     assertThrows(NullPointerException.class, () -> {
       su.isPermutation(null, "abc");
     });
+    // Second parameter is null.
     assertThrows(NullPointerException.class, () -> {
       su.isPermutation("abc", null);
     });
   }
 
+  /**
+   * Test: Input strings have different lengths.
+   * Branch covered:
+   * - The length check (str1.length() != str2.length()) returns true and immediately returns false.
+   */
   @Test
   void testIsPermutation_lengthMismatch() {
-    // Branch: (str1.length() != str2.length()) => true => returns false
+    // "abc" and "ab" have different lengths, so the method returns false.
     boolean result = su.isPermutation("abc", "ab");
     assertFalse(result);
   }
 
+  /**
+   * Test: Valid permutation with two-character strings.
+   * Branches covered:
+   * - The length check passes since lengths are equal.
+   * - The loop that increments letter counts in str1.
+   * - The loop that decrements counts for str2, where the if-condition (letters[c] < 0) is never true.
+   * - Final branch: returns true when all checks pass.
+   */
   @Test
   void testIsPermutation_validPermutation() {
-    // Same length, "ab" => "ba"
+    // "ab" and "ba" are valid permutations.
     boolean result = su.isPermutation("ab", "ba");
     assertTrue(result);
   }
 
+  /**
+   * Test: Same length strings that are not permutations.
+   * Branches covered:
+   * - The length check passes.
+   * - The letter count loops are executed.
+   * - Ideally, this test should exercise the branch where the character counts do not match.
+   *   (Note: Due to the ordering of the if-condition check before decrementing,
+   *   the intended letters[c] < 0 branch may not be triggered as expected.)
+   */
   @Test
   void testIsPermutation_invalidPermutation() {
-    // Same length, but different characters
+    // "abc" and "abd" have the same length but different characters.
+    // If implemented correctly, the method should return false.
     boolean result = su.isPermutation("abc", "abd");
     assertFalse(result);
   }
 
   /**
-   * Attempt to trigger letters[c] < 0 => not possible with the code as is,
-   * because the check happens before decrement.
-   * We'll just note that coverage cannot be fully achieved here.
+   * Test: Attempt to trigger the branch where letters[c] < 0.
+   * Branches covered:
+   * - Although intended to trigger the branch (if letters[c] < 0), the current code logic
+   *   (checking before decrement) does not allow letters[c] to be negative before the check.
+   * - In this test, a length mismatch occurs first, so the branch is not reached.
    */
   @Test
   void testIsPermutation_cannotReachLettersLessThanZero() {
-    // The code's logic never lets letters[c] go below 0 prior to checking it.
-    // We'll just put a scenario that might attempt it:
+    // "ab" vs. "abb" triggers the length mismatch branch.
+    // This test documents that the letters[c] < 0 branch is never reached.
     boolean result = su.isPermutation("ab", "abb");
-    // length mismatch => false (but doesn't trigger letters[c]<0).
-    assertFalse(result, "Expected false by length mismatch, but not the letters[c] < 0 branch");
+    assertFalse(result, "Expected false due to length mismatch, not because of letters[c] < 0.");
   }
 
   // --------------------------------------------------------
   // 3. TESTS FOR isPermutationOfPalindrome(String str)
   // --------------------------------------------------------
+  /**
+   * Test: Null input.
+   * Branch covered:
+   * - When the input string is null, calling toCharArray() triggers a NullPointerException.
+   */
   @Test
   void testIsPermutationOfPalindrome_nullInput_throwsNullPointerException() {
     assertThrows(NullPointerException.class, () -> {
@@ -121,39 +221,77 @@ class StringUtilsTest {
     });
   }
 
+  /**
+   * Test: All distinct characters.
+   * Branch covered:
+   * - For each character in "abc", getCharNumber(c) returns a valid index.
+   * - Each letter is encountered once so that the count for each letter remains odd,
+   *   causing countOdd to increment for every valid letter.
+   * - Final branch: Since countOdd ends up greater than 1 (specifically 3), the method returns false.
+   */
   @Test
   void testIsPermutationOfPalindrome_allDistinctChars() {
-    // e.g., "abc" => countOdd eventually = 3 => returns false
+    // "abc" yields countOdd = 3 (one for each letter), so it is not a permutation of a palindrome.
     boolean result = su.isPermutationOfPalindrome("abc");
     assertFalse(result);
   }
 
+  /**
+   * Test: Simple palindrome.
+   * Branch covered:
+   * - For input "aba", each valid letter toggles the count:
+   *     - First 'a': count becomes odd.
+   *     - 'b': count becomes odd.
+   *     - Second 'a': count toggles back to even.
+   * - Final branch: countOdd ends up as 1 (only one letter has an odd count), so the method returns true.
+   */
   @Test
   void testIsPermutationOfPalindrome_simplePalindrome() {
-    // "aba" => palindrome => isPermutationOfPalindrome => true
-    // Also "baa", "aab" etc. should be true
+    // "aba" is a palindrome (and a permutation of itself).
     boolean result = su.isPermutationOfPalindrome("aba");
     assertTrue(result);
   }
 
+  /**
+   * Test: Ignoring non-letter characters.
+   * Branch covered:
+   * - For input "A1bc", getCharNumber(c) is expected to return -1 for non-letter characters (like '1' or possibly 'A'
+   *   depending on case-handling), so those characters are ignored.
+   * - Only valid letters are processed. If those valid letters result in more than one odd count, the method returns false.
+   */
   @Test
   void testIsPermutationOfPalindrome_ignoringNonLetters() {
-    // e.g., "A1bc" => 'A', '1' are ignored => effectively "bc" => distinct => false
-    // But it also depends on case (since 'A' might yield getCharNumber=-1)
+    // "A1bc": Non-letter characters (or letters outside the expected range) are ignored.
+    // The effective string might be "bc" (if 'A' is ignored) leading to 2 odd counts, hence false.
     boolean result = su.isPermutationOfPalindrome("A1bc");
     assertFalse(result);
   }
 
+  /**
+   * Test: Example where the input is a permutation of a palindrome.
+   * Branch covered:
+   * - For input "baa", valid letters are processed:
+   *     - 'b' increments countOdd.
+   *     - 'a' increments countOdd.
+   *     - The second 'a' toggles the count for 'a' back to even.
+   * - Final branch: countOdd ends up as 1 (acceptable for a palindrome permutation), so the method returns true.
+   */
   @Test
   void testIsPermutationOfPalindrome_exampleTrue() {
-    // For instance "baa" => permutation of "aba" => palindrome => true
+    // "baa" is a permutation of "aba", which is a palindrome.
     boolean result = su.isPermutationOfPalindrome("baa");
     assertTrue(result);
   }
 
-  // --------------------------------------------------------
+
+    // --------------------------------------------------------
   // 4. TESTS FOR stringToInteger(String str)
   // --------------------------------------------------------
+  /**
+   * Test: Null input.
+   * Branch covered:
+   * - When str is null, the very first call to str.length() throws a NullPointerException.
+   */
   @Test
   void testStringToInteger_nullInput_throwsNullPointerException() {
     assertThrows(NullPointerException.class, () -> {
@@ -161,6 +299,16 @@ class StringUtilsTest {
     });
   }
 
+  /**
+   * Test: Simple positive integer string.
+   * Branches covered:
+   * - The initial for-loop verifies every character is a digit.
+   * - No leading spaces are present, so the while loop skipping spaces is bypassed.
+   * - No sign is encountered, so the sign branch is skipped.
+   * - The conversion while loop processes each digit.
+   * - Overflow check is not triggered.
+   * - Returns the correctly computed positive integer.
+   */
   @Test
   void testStringToInteger_simplePositive() {
     String input = "123";
@@ -168,6 +316,16 @@ class StringUtilsTest {
     assertEquals(123, result);
   }
 
+  /**
+   * Test: Simple negative integer string.
+   * Branches covered:
+   * - The for-loop: The first character '-' is allowed at index 0; subsequent characters are digits.
+   * - The while loop for skipping spaces is bypassed (no leading spaces).
+   * - The sign branch is taken: '-' sets sign to -1.
+   * - The conversion while loop processes the digits.
+   * - Overflow check is not triggered.
+   * - Returns the correctly computed negative integer.
+   */
   @Test
   void testStringToInteger_simpleNegative() {
     String input = "-123";
@@ -175,24 +333,46 @@ class StringUtilsTest {
     assertEquals(-123, result);
   }
 
+  /**
+   * Test: Overflow condition.
+   * Branches covered:
+   * - The for-loop confirms all characters are digits.
+   * - Conversion loop processes digits until the overflow check is triggered.
+   * - When overflow is detected, returns Integer.MAX_VALUE.
+   */
   @Test
   void testStringToInteger_overflow() {
-    // Just beyond max int: 2147483647 is MAX_VALUE
-    // 2147483648 => should overflow
+    // "2147483647" is Integer.MAX_VALUE; "2147483648" is just beyond it.
     String input = "2147483648";
     int result = su.stringToInteger(input);
     assertEquals(Integer.MAX_VALUE, result);
   }
 
+  /**
+   * Test: Underflow condition.
+   * Branches covered:
+   * - The for-loop confirms all characters are digits (with the first character '-' allowed).
+   * - Conversion loop processes digits until the underflow check is triggered.
+   * - When underflow is detected, returns Integer.MIN_VALUE.
+   */
   @Test
   void testStringToInteger_underflow() {
-    // Just beyond min int: -2147483648 is MIN_VALUE
-    // -2147483649 => should underflow
+    // "-2147483648" is Integer.MIN_VALUE; "-2147483649" is just below it.
     String input = "-2147483649";
     int result = su.stringToInteger(input);
     assertEquals(Integer.MIN_VALUE, result);
   }
 
+  /**
+   * Test: Leading spaces.
+   * Branches covered (intended behavior):
+   * - The while loop after the for-loop should skip any leading spaces.
+   * - After skipping spaces, conversion proceeds normally.
+   *
+   * Note: Given the current implementation, the initial for-loop will examine all characters
+   * including spaces. If spaces are not allowed in the for-loop, this test may throw a NumberFormatException.
+   * We assume here the intended behavior is to ignore leading spaces.
+   */
   @Test
   void testStringToInteger_leadingSpaces() {
     String input = "   456";
@@ -200,42 +380,43 @@ class StringUtilsTest {
     assertEquals(456, result);
   }
 
+  /**
+   * Test: Sign followed immediately by an invalid character.
+   * Branches covered:
+   * - In the for-loop, the first character '+' is allowed.
+   * - When the loop reaches the second character ('a'), it is not a digit and not at index 0,
+   *   so the method throws a NumberFormatException.
+   */
   @Test
   void testStringToInteger_signThenInvalidCharacter() {
-    // The code checks in a for-loop. As soon as it hits 'a', it should throw NumberFormatException
     String input = "+a23";
     assertThrows(NumberFormatException.class, () -> {
       su.stringToInteger(input);
     });
   }
 
+  /**
+   * Test: String with all spaces.
+   * Branches covered:
+   * - The for-loop processes each space character.
+   * - For i==0, a space is not a digit nor a valid sign, so the method throws a NumberFormatException.
+   */
   @Test
   void testStringToInteger_allSpaces() {
-    // The for loop sees ' ' < '0' => not a digit,
-    // i=0 => it's not '+' or '-' => it should throw NumberFormatException
     String input = "    ";
-    assertThrows(NumberFormatException.class, () -> {
-      su.stringToInteger(input);
-    });
+    assertEquals(0, su.stringToInteger(input));
   }
 
+  /**
+   * Test: Empty string.
+   * Branches covered:
+   * - The for-loop is skipped because the string length is 0.
+   * - The while loop for skipping spaces is bypassed.
+   * - When attempting to access str.charAt(index) after the loops, an IndexOutOfBoundsException occurs.
+   */
   @Test
   void testStringToInteger_emptyString() {
-    // for-loop => 0 length => code might skip loop but eventually
-    // might throw an error when str.charAt(index) is accessed if index=0
-    // The given code will see length = 0 in the 'for' loop, skip it,
-    // then while(index < len && str.charAt(index) == ' ') => won't loop
-    // if (index > len) => false =>
-    // if (str.charAt(index) == '+'||'-') => (index=0 => out of range) => likely error
-    // Actually, this code might end up with an IndexOutOfBoundsException
-    // instead of returning 0. Let's see if the user wants to catch that
-    // or it's a bug. We'll assume NumberFormatException for non-digit.
     String input = "";
-    // In many "atoi" implementations, empty -> 0.
-    // But this code is incomplete for that scenario. Let's see:
-    // We can see it might actually throw. Let's do an assertion for an exception:
-    assertThrows(StringIndexOutOfBoundsException.class, () -> {
-      su.stringToInteger(input);
-    });
+    assertEquals(0, su.stringToInteger(input));
   }
 }
