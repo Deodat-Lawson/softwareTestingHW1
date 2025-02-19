@@ -1,0 +1,622 @@
+Index: src/test/java/StringUtilsTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\n\r\nimport static org.junit.jupiter.api.Assertions.*;\r\n\r\nimport org.example.StringUtils;\r\nimport org.example.StringUtilsFixed;\r\nimport org.junit.jupiter.api.BeforeEach;\r\nimport org.junit.jupiter.api.Test;\r\n\r\nclass StringUtilsTest {\r\n\r\n  private StringUtilsFixed su;\r\n\r\n  @BeforeEach\r\n  void setUp() {\r\n    su = new StringUtilsFixed();\r\n  }\r\n\r\n  // --------------------------------------------------------\r\n  // 1. TESTS FOR compress(String str)\r\n  // --------------------------------------------------------\r\n  ;\r\n\r\n  /**\r\n   * Test: null input.\r\n   * Branch covered: The very first check in compress() that throws a NullPointerException\r\n   * when the input string is null.\r\n   */\r\n  @Test\r\n  void testCompress_nullInput_throwsNullPointerException() {\r\n    assertThrows(NullPointerException.class, () -> {\r\n      su.compress(null);\r\n    });\r\n  }\r\n\r\n  /**\r\n   * Test: empty string input.\r\n   * Branch covered:\r\n   * - When the input string is empty, the for-loop is never entered.\r\n   * - The final return branch is executed where the empty compressed string is returned.\r\n   */\r\n  @Test\r\n  void testCompress_emptyString_returnsEmptyString() {\r\n    String input = \"\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"\", result);\r\n  }\r\n\r\n\r\n  /**\r\n   * Test: single character.\r\n   * Branch covered:\r\n   * - The loop runs exactly once, and the if condition is true because the current index is the last character.\r\n   * - Final branch: Since the compressed result (\"a1\") is not shorter than the original (\"a\"),\r\n   *   the original string is returned.\r\n   *\r\n   * Fault: The code goes into the loop, but it is unable to check the if condition because the index is out of\r\n   * bounds. The code should check if it is the last character before incrementing the count.\r\n   */\r\n  @Test\r\n  void testCompress_singleChar_returnsOriginalString() {\r\n    String input = \"a\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"a\", result);\r\n  }\r\n\r\n  /**\r\n   * Test: repeated characters where compression is not beneficial.\r\n   * Branch covered:\r\n   * - For input \"aa\": For the first character (i=0), the if condition is false because the next character is the same.\r\n   * - For the second character (i=1), the if condition is true because it is the last character.\r\n   * - Final branch: Since the compressed result (\"a2\") is not strictly shorter than \"aa\", the original is returned.\r\n   *\r\n   * Fault: The code doesn't return the original string when the compressed string is not strictly shorter.\r\n   */\r\n  @Test\r\n  void testCompress_repetition_returnsOriginalStringIfCompressionNotBeneficial() {\r\n    String input = \"aa\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"aa\", result,\r\n        \"Should return original string when the compressed string is not strictly shorter\");\r\n  }\r\n\r\n  /**\r\n   * Test: mixed characters with no compression advantage.\r\n   * Branch covered:\r\n   * - For input \"ab\": For i=0, the if condition is true because the next character is different.\r\n   * - For i=1, the condition is true because it is the last character.\r\n   * - Final branch: The compressed result (\"a1b1\") is longer than the original, so the original string is returned.\r\n   */\r\n  @Test\r\n  void testCompress_mixedNoAdvantage_returnsOriginalString() {\r\n    String input = \"ab\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"ab\", result);\r\n  }\r\n\r\n  /**\r\n   * Test: typical example.\r\n   * Branch covered:\r\n   * - For input \"aabcccccaaa\": Multiple iterations occur.\r\n   * - Both branches of the loop's if-statement are exercised:\r\n   *     * When the next character is the same (if condition false)\r\n   *     * When the run of identical characters ends (if condition true, either because of a differing next char or end-of-string).\r\n   * - Final branch: The compressed string (\"a2b1c5a3\") is shorter than the original, so the compressed string is returned.\r\n   */\r\n  @Test\r\n  void testCompress_typicalExample_returnsCompressedString() {\r\n    String input = \"aabcccccaaa\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"a2b1c5a3\", result);\r\n  }\r\n\r\n  /**\r\n   * Test: intermediate case with a mix of single and repeated characters.\r\n   * Branch covered:\r\n   * - For input \"abb\":\r\n   *     * At index 0: if condition is true because 'a' != 'b'.\r\n   *     * At index 1: if condition is false because 'b' equals the next 'b'.\r\n   *     * At index 2: if condition is true because it is the last character.\r\n   * - Final branch: The compressed result (\"a1b2\") is not shorter than the original (\"abb\"), so the original string is returned.\r\n   */\r\n  @Test\r\n  void testCompress_intermediateCase_returnsOriginalString() {\r\n    String input = \"abb\";\r\n    String result = su.compress(input);\r\n    assertEquals(\"abb\", result);\r\n  }\r\n\r\n  // --------------------------------------------------------\r\n  // 2. TESTS FOR isPermutation(String str1, String str2)\r\n  // --------------------------------------------------------\r\n  /**\r\n   * Test: One or both input strings are null.\r\n   * Branches covered:\r\n   * - Implicit null check when calling str1.length() or str2.length() (resulting in a NullPointerException).\r\n   */\r\n  @Test\r\n  void testIsPermutation_nullInput_throwsNullPointerException() {\r\n    // First parameter is null.\r\n    assertThrows(NullPointerException.class, () -> {\r\n      su.isPermutation(null, \"abc\");\r\n    });\r\n    // Second parameter is null.\r\n    assertThrows(NullPointerException.class, () -> {\r\n      su.isPermutation(\"abc\", null);\r\n    });\r\n  }\r\n\r\n  /**\r\n   * Test: Input strings have different lengths.\r\n   * Branch covered:\r\n   * - The length check (str1.length() != str2.length()) returns true and immediately returns false.\r\n   */\r\n  @Test\r\n  void testIsPermutation_lengthMismatch() {\r\n    // \"abc\" and \"ab\" have different lengths, so the method returns false.\r\n    boolean result = su.isPermutation(\"abc\", \"ab\");\r\n    assertFalse(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Valid permutation with two-character strings.\r\n   * Branches covered:\r\n   * - The length check passes since lengths are equal.\r\n   * - The loop that increments letter counts in str1.\r\n   * - The loop that decrements counts for str2, where the if-condition (letters[c] < 0) is never true.\r\n   * - Final branch: returns true when all checks pass.\r\n   */\r\n  @Test\r\n  void testIsPermutation_validPermutation() {\r\n    // \"ab\" and \"ba\" are valid permutations.\r\n    boolean result = su.isPermutation(\"ab\", \"ba\");\r\n    assertTrue(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Same length strings that are not permutations.\r\n   * Branches covered:\r\n   * - The length check passes.\r\n   * - The letter count loops are executed.\r\n   * - Ideally, this test should exercise the branch where the character counts do not match.\r\n   *   (Note: Due to the ordering of the if-condition check before decrementing,\r\n   *   the intended letters[c] < 0 branch may not be triggered as expected.)\r\n   */\r\n  @Test\r\n  void testIsPermutation_invalidPermutation() {\r\n    // \"abc\" and \"abd\" have the same length but different characters.\r\n    // If implemented correctly, the method should return false.\r\n    boolean result = su.isPermutation(\"abc\", \"abd\");\r\n    assertFalse(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Attempt to trigger the branch where letters[c] < 0.\r\n   * Branches covered:\r\n   * - Although intended to trigger the branch (if letters[c] < 0), the current code logic\r\n   *   (checking before decrement) does not allow letters[c] to be negative before the check.\r\n   * - In this test, a length mismatch occurs first, so the branch is not reached.\r\n   */\r\n  @Test\r\n  void testIsPermutation_cannotReachLettersLessThanZero() {\r\n    // \"ab\" vs. \"abb\" triggers the length mismatch branch.\r\n    // This test documents that the letters[c] < 0 branch is never reached.\r\n    boolean result = su.isPermutation(\"ab\", \"abb\");\r\n    assertFalse(result, \"Expected false due to length mismatch, not because of letters[c] < 0.\");\r\n  }\r\n\r\n  // --------------------------------------------------------\r\n  // 3. TESTS FOR isPermutationOfPalindrome(String str)\r\n  // --------------------------------------------------------\r\n  /**\r\n   * Test: Null input.\r\n   * Branch covered:\r\n   * - When the input string is null, calling toCharArray() triggers a NullPointerException.\r\n   */\r\n  @Test\r\n  void testIsPermutationOfPalindrome_nullInput_throwsNullPointerException() {\r\n    assertThrows(NullPointerException.class, () -> {\r\n      su.isPermutationOfPalindrome(null);\r\n    });\r\n  }\r\n\r\n  /**\r\n   * Test: All distinct characters.\r\n   * Branch covered:\r\n   * - For each character in \"abc\", getCharNumber(c) returns a valid index.\r\n   * - Each letter is encountered once so that the count for each letter remains odd,\r\n   *   causing countOdd to increment for every valid letter.\r\n   * - Final branch: Since countOdd ends up greater than 1 (specifically 3), the method returns false.\r\n   */\r\n  @Test\r\n  void testIsPermutationOfPalindrome_allDistinctChars() {\r\n    // \"abc\" yields countOdd = 3 (one for each letter), so it is not a permutation of a palindrome.\r\n    boolean result = su.isPermutationOfPalindrome(\"abc\");\r\n    assertFalse(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Simple palindrome.\r\n   * Branch covered:\r\n   * - For input \"aba\", each valid letter toggles the count:\r\n   *     - First 'a': count becomes odd.\r\n   *     - 'b': count becomes odd.\r\n   *     - Second 'a': count toggles back to even.\r\n   * - Final branch: countOdd ends up as 1 (only one letter has an odd count), so the method returns true.\r\n   */\r\n  @Test\r\n  void testIsPermutationOfPalindrome_simplePalindrome() {\r\n    // \"aba\" is a palindrome (and a permutation of itself).\r\n    boolean result = su.isPermutationOfPalindrome(\"aba\");\r\n    assertTrue(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Ignoring non-letter characters.\r\n   * Branch covered:\r\n   * - For input \"A1bc\", getCharNumber(c) is expected to return -1 for non-letter characters (like '1' or possibly 'A'\r\n   *   depending on case-handling), so those characters are ignored.\r\n   * - Only valid letters are processed. If those valid letters result in more than one odd count, the method returns false.\r\n   */\r\n  @Test\r\n  void testIsPermutationOfPalindrome_ignoringNonLetters() {\r\n    // \"A1bc\": Non-letter characters (or letters outside the expected range) are ignored.\r\n    // The effective string might be \"bc\" (if 'A' is ignored) leading to 2 odd counts, hence false.\r\n    boolean result = su.isPermutationOfPalindrome(\"A1bc\");\r\n    assertFalse(result);\r\n  }\r\n\r\n  /**\r\n   * Test: Example where the input is a permutation of a palindrome.\r\n   * Branch covered:\r\n   * - For input \"baa\", valid letters are processed:\r\n   *     - 'b' increments countOdd.\r\n   *     - 'a' increments countOdd.\r\n   *     - The second 'a' toggles the count for 'a' back to even.\r\n   * - Final branch: countOdd ends up as 1 (acceptable for a palindrome permutation), so the method returns true.\r\n   */\r\n  @Test\r\n  void testIsPermutationOfPalindrome_exampleTrue() {\r\n    // \"baa\" is a permutation of \"aba\", which is a palindrome.\r\n    boolean result = su.isPermutationOfPalindrome(\"baa\");\r\n    assertTrue(result);\r\n  }\r\n\r\n\r\n    // --------------------------------------------------------\r\n  // 4. TESTS FOR stringToInteger(String str)\r\n  // --------------------------------------------------------\r\n  /**\r\n   * Test: Null input.\r\n   * Branch covered:\r\n   * - When str is null, the very first call to str.length() throws a NullPointerException.\r\n   */\r\n  @Test\r\n  void testStringToInteger_nullInput_throwsNullPointerException() {\r\n    assertThrows(NullPointerException.class, () -> {\r\n      su.stringToInteger(null);\r\n    });\r\n  }\r\n\r\n  /**\r\n   * Test: Simple positive integer string.\r\n   * Branches covered:\r\n   * - The initial for-loop verifies every character is a digit.\r\n   * - No leading spaces are present, so the while loop skipping spaces is bypassed.\r\n   * - No sign is encountered, so the sign branch is skipped.\r\n   * - The conversion while loop processes each digit.\r\n   * - Overflow check is not triggered.\r\n   * - Returns the correctly computed positive integer.\r\n   */\r\n  @Test\r\n  void testStringToInteger_simplePositive() {\r\n    String input = \"123\";\r\n    int result = su.stringToInteger(input);\r\n    assertEquals(123, result);\r\n  }\r\n\r\n  /**\r\n   * Test: Simple negative integer string.\r\n   * Branches covered:\r\n   * - The for-loop: The first character '-' is allowed at index 0; subsequent characters are digits.\r\n   * - The while loop for skipping spaces is bypassed (no leading spaces).\r\n   * - The sign branch is taken: '-' sets sign to -1.\r\n   * - The conversion while loop processes the digits.\r\n   * - Overflow check is not triggered.\r\n   * - Returns the correctly computed negative integer.\r\n   */\r\n  @Test\r\n  void testStringToInteger_simpleNegative() {\r\n    String input = \"-123\";\r\n    int result = su.stringToInteger(input);\r\n    assertEquals(-123, result);\r\n  }\r\n\r\n  /**\r\n   * Test: Overflow condition.\r\n   * Branches covered:\r\n   * - The for-loop confirms all characters are digits.\r\n   * - Conversion loop processes digits until the overflow check is triggered.\r\n   * - When overflow is detected, returns Integer.MAX_VALUE.\r\n   */\r\n  @Test\r\n  void testStringToInteger_overflow() {\r\n    // \"2147483647\" is Integer.MAX_VALUE; \"2147483648\" is just beyond it.\r\n    String input = \"2147483648\";\r\n    int result = su.stringToInteger(input);\r\n    assertEquals(Integer.MAX_VALUE, result);\r\n  }\r\n\r\n  /**\r\n   * Test: Underflow condition.\r\n   * Branches covered:\r\n   * - The for-loop confirms all characters are digits (with the first character '-' allowed).\r\n   * - Conversion loop processes digits until the underflow check is triggered.\r\n   * - When underflow is detected, returns Integer.MIN_VALUE.\r\n   */\r\n  @Test\r\n  void testStringToInteger_underflow() {\r\n    // \"-2147483648\" is Integer.MIN_VALUE; \"-2147483649\" is just below it.\r\n    String input = \"-2147483649\";\r\n    int result = su.stringToInteger(input);\r\n    assertEquals(Integer.MIN_VALUE, result);\r\n  }\r\n\r\n  /**\r\n   * Test: Leading spaces.\r\n   * Branches covered (intended behavior):\r\n   * - The while loop after the for-loop should skip any leading spaces.\r\n   * - After skipping spaces, conversion proceeds normally.\r\n   *\r\n   * Note: Given the current implementation, the initial for-loop will examine all characters\r\n   * including spaces. If spaces are not allowed in the for-loop, this test may throw a NumberFormatException.\r\n   * We assume here the intended behavior is to ignore leading spaces.\r\n   */\r\n  @Test\r\n  void testStringToInteger_leadingSpaces() {\r\n    String input = \"   456\";\r\n    int result = su.stringToInteger(input);\r\n    assertEquals(456, result);\r\n  }\r\n\r\n  /**\r\n   * Test: Sign followed immediately by an invalid character.\r\n   * Branches covered:\r\n   * - In the for-loop, the first character '+' is allowed.\r\n   * - When the loop reaches the second character ('a'), it is not a digit and not at index 0,\r\n   *   so the method throws a NumberFormatException.\r\n   */\r\n  @Test\r\n  void testStringToInteger_signThenInvalidCharacter() {\r\n    String input = \"+a23\";\r\n    assertThrows(NumberFormatException.class, () -> {\r\n      su.stringToInteger(input);\r\n    });\r\n  }\r\n\r\n  /**\r\n   * Test: String with all spaces.\r\n   * Branches covered:\r\n   * - The for-loop processes each space character.\r\n   * - For i==0, a space is not a digit nor a valid sign, so the method throws a NumberFormatException.\r\n   */\r\n  @Test\r\n  void testStringToInteger_allSpaces() {\r\n    String input = \"    \";\r\n    assertEquals(0, su.stringToInteger(input));\r\n  }\r\n\r\n  /**\r\n   * Test: Empty string.\r\n   * Branches covered:\r\n   * - The for-loop is skipped because the string length is 0.\r\n   * - The while loop for skipping spaces is bypassed.\r\n   * - When attempting to access str.charAt(index) after the loops, an IndexOutOfBoundsException occurs.\r\n   */\r\n  @Test\r\n  void testStringToInteger_emptyString() {\r\n    String input = \"\";\r\n    assertEquals(0, su.stringToInteger(input));\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/StringUtilsTest.java b/src/test/java/StringUtilsTest.java
+--- a/src/test/java/StringUtilsTest.java	(revision dc01f76dfc532fff0ba47cbb2bc0e8d7e828afd9)
++++ b/src/test/java/StringUtilsTest.java	(date 1739912314864)
+@@ -9,11 +9,11 @@
+ 
+ class StringUtilsTest {
+ 
+-  private StringUtilsFixed su;
++  private StringUtils su;
+ 
+   @BeforeEach
+   void setUp() {
+-    su = new StringUtilsFixed();
++    su = new StringUtils();
+   }
+ 
+   // --------------------------------------------------------
+@@ -54,8 +54,7 @@
+    * - Final branch: Since the compressed result ("a1") is not shorter than the original ("a"),
+    *   the original string is returned.
+    *
+-   * Fault: The code goes into the loop, but it is unable to check the if condition because the index is out of
+-   * bounds. The code should check if it is the last character before incrementing the count.
++   *
+    */
+   @Test
+   void testCompress_singleChar_returnsOriginalString() {
+@@ -380,6 +379,20 @@
+     assertEquals(456, result);
+   }
+ 
++  /**
++   * Test: Leading spaces with sign.
++   * Branches covered:
++   * - The while loop skips leading spaces.
++   * - The sign branch is taken after skipping spaces.
++   * - The conversion loop processes the digits normally.
++   */
++  @Test
++  void testStringToInteger_leadingSpacesAndSign() {
++    String input = "   -789";
++    int result = su.stringToInteger(input);
++    assertEquals(-789, result);
++  }
++
+   /**
+    * Test: Sign followed immediately by an invalid character.
+    * Branches covered:
+Index: src/main/java/org/example/Sudoku.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.util.HashMap;\r\n\r\npublic class Sudoku {\r\n    /**\r\n     * This method determine if a given 9 x 9 task3.Sudoku board of characters is valid. Only the filled cells need to be validated\r\n     * according to the following rules:\r\n     * 1. Each row has the digits 1-9 without repetition.\r\n     * 2. Each column has the digits 1-9 without repetition.\r\n     * 3. Each of the nine 3 x 3 sub-boxes of the grid has the digits 1-9 without repetition.\r\n     * Also, note that:\r\n     * 1. A task3.Sudoku board (partially filled) could be valid but is not necessarily solvable.\r\n     * 2. Only the filled cells need to be validated according to the mentioned rules.\r\n     * @param board a char-typed 2d array representing the board, '.' indicating empty cell\r\n     * @return true if valid, false otherwise.\r\n     */\r\n    public static boolean isValidSudoku(char[][] board) {\r\n        // init data\r\n        HashMap<Integer, Integer>[] rows = new HashMap[9];\r\n        HashMap<Integer, Integer> [] columns = new HashMap[9];\r\n        HashMap<Integer, Integer> [] boxes = new HashMap[9];\r\n        for (int i = 0; i < 9; i++) {\r\n            rows[i] = new HashMap<Integer, Integer>();\r\n            columns[i] = new HashMap<Integer, Integer>();\r\n            boxes[i] = new HashMap<Integer, Integer>();\r\n        }\r\n\r\n        // validate a board\r\n        for (int i = 0; i < 9; i++) {\r\n            for (int j = 0; j < 9; j++) {\r\n                char num = board[i][j];\r\n                if (num != '.') {\r\n                    int n = (int)num;\r\n                    int box_index = (i / 3 ) * 3 + j / 3;\r\n\r\n                    // keep the current cell value\r\n                    rows[i].put(n, rows[i].getOrDefault(n, 0) + 1);\r\n                    columns[j].put(n, columns[j].getOrDefault(n, 0) + 1);\r\n                    boxes[box_index].put(n, boxes[box_index].getOrDefault(n, 0) + 1);\r\n\r\n                    // check if this value has been already seen before\r\n                    if (rows[i].get(n) > 1 || columns[j].get(n) > 1 || boxes[box_index].get(n) > 1)\r\n                        return false;\r\n                }\r\n            }\r\n        }\r\n\r\n        return true;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Sudoku.java b/src/main/java/org/example/Sudoku.java
+--- a/src/main/java/org/example/Sudoku.java	(revision dc01f76dfc532fff0ba47cbb2bc0e8d7e828afd9)
++++ b/src/main/java/org/example/Sudoku.java	(date 1739922031139)
+@@ -4,7 +4,9 @@
+ 
+ public class Sudoku {
+     /**
+-     * This method determine if a given 9 x 9 task3.Sudoku board of characters is valid. Only the filled cells need to be validated
++     * This method determine if a given 9 x 9 task3. Sudoku board of characters is valid. Only the filled cells
++     * need
++     * to be validated
+      * according to the following rules:
+      * 1. Each row has the digits 1-9 without repetition.
+      * 2. Each column has the digits 1-9 without repetition.
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"04520427-9fd3-4bb1-ac57-286014f7c6c3\" name=\"Changes\" comment=\"hw1-added task two\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/org/example/StringUtilsFixed.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/StringUtilsTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/StringUtilsTest.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 1\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2t5c1FV09Yap6bJ9bKskpqMOQC9\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/timot/IdeaProjects/software-testing-hw1/src/main/java/org/example&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\timot\\IdeaProjects\\software-testing-hw1\\src\\main\\java\\org\\example\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\timot\\IdeaProjects\\software-testing-hw1\\libs\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"JUnit.StringUtilsTest.testStringToInteger_emptyString\">\r\n    <configuration name=\"StringUtilsTest.testStringToInteger_allSpaces\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"software-testing-hw1\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"StringUtilsTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"testStringToInteger_allSpaces\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"StringUtilsTest.testStringToInteger_emptyString\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"software-testing-hw1\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"StringUtilsTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"testStringToInteger_emptyString\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"StringUtilsTest.testStringToInteger_leadingSpaces\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"software-testing-hw1\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"StringUtilsTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"testStringToInteger_leadingSpaces\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"StringUtilsTest.testStringToInteger_signThenInvalidCharacter\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"software-testing-hw1\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"StringUtilsTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"testStringToInteger_signThenInvalidCharacter\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"StringUtilsTest.testStringToInteger_simpleNegative\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"software-testing-hw1\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"StringUtilsTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"testStringToInteger_simpleNegative\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"JUnit.StringUtilsTest.testStringToInteger_emptyString\" />\r\n        <item itemvalue=\"JUnit.StringUtilsTest.testStringToInteger_allSpaces\" />\r\n        <item itemvalue=\"JUnit.StringUtilsTest.testStringToInteger_signThenInvalidCharacter\" />\r\n        <item itemvalue=\"JUnit.StringUtilsTest.testStringToInteger_leadingSpaces\" />\r\n        <item itemvalue=\"JUnit.StringUtilsTest.testStringToInteger_simpleNegative\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"04520427-9fd3-4bb1-ac57-286014f7c6c3\" name=\"Changes\" comment=\"\" />\r\n      <created>1739645161078</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1739645161078</updated>\r\n      <workItem from=\"1739645162094\" duration=\"9366000\" />\r\n      <workItem from=\"1739718986728\" duration=\"14840000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"hw1-task1 completed\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1739724325383</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1739724325383</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"hw1-added task two\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1739731923433</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1739731923433</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"hw1-task1 completed\" />\r\n    <MESSAGE value=\"hw1-added task two\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"hw1-added task two\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/src/test/java/BuggleSortTest.java</url>\r\n          <line>217</line>\r\n          <properties class=\"BuggleSortTest\" method=\"NormalDescendingTest1\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"9\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/src/test/java/MyArrayListTest.java</url>\r\n          <line>230</line>\r\n          <properties class=\"MyArrayListTest\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"11\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/main/java/org/example/StringUtilsFixed.java</url>\r\n          <line>117</line>\r\n          <option name=\"timeStamp\" value=\"20\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision dc01f76dfc532fff0ba47cbb2bc0e8d7e828afd9)
++++ b/.idea/workspace.xml	(date 1740001582619)
+@@ -4,9 +4,11 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="hw1-added task two">
+-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/StringUtilsFixed.java" afterDir="false" />
++    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="added task 3">
++      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/SudokuFixed.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/test/java/TestIsValidSudoku.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -24,6 +26,18 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "lastFilter": {
++    "state": "OPEN",
++    "assignee": "Deodat-Lawson"
++  }
++}]]></component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/Deodat-Lawson/softwareTestingHW1.git",
++    "accountId": "d3c5a069-b9d0-47b3-92d4-5b343e33d66e"
++  }
++}]]></component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 1
+ }</component>
+@@ -33,33 +47,38 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/timot/IdeaProjects/software-testing-hw1/src/main/java/org/example&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "WebServerToolWindowFactoryState": "false",
++    "git-widget-placeholder": "master",
++    "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "C:/Users/timot/IdeaProjects/software-testing-hw1/src/main/java/org/example",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "project.structure.last.edited": "Modules",
++    "project.structure.proportion": "0.0",
++    "project.structure.side.proportion": "0.0",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="C:\Users\timot\IdeaProjects\software-testing-hw1\src\main\java\org\example" />
+     </key>
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="C:\Users\timot\IdeaProjects\software-testing-hw1\libs" />
++    </key>
++    <key name="CopyClassDialog.RECENTS_KEY">
++      <recent name="org.example" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="JUnit.StringUtilsTest.testStringToInteger_emptyString">
++  <component name="RunManager" selected="JUnit.TestIsValidSudoku.testIsValidSudoku">
+     <configuration name="StringUtilsTest.testStringToInteger_allSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="software-testing-hw1" />
+       <option name="PACKAGE_NAME" value="" />
+@@ -70,41 +89,41 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration name="StringUtilsTest.testStringToInteger_emptyString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++    <configuration name="StringUtilsTest.testStringToInteger_leadingSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="software-testing-hw1" />
+       <option name="PACKAGE_NAME" value="" />
+       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
+-      <option name="METHOD_NAME" value="testStringToInteger_emptyString" />
++      <option name="METHOD_NAME" value="testStringToInteger_leadingSpaces" />
+       <option name="TEST_OBJECT" value="method" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration name="StringUtilsTest.testStringToInteger_leadingSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++    <configuration name="StringUtilsTest.testStringToInteger_leadingSpacesAndSign" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="software-testing-hw1" />
+       <option name="PACKAGE_NAME" value="" />
+       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
+-      <option name="METHOD_NAME" value="testStringToInteger_leadingSpaces" />
++      <option name="METHOD_NAME" value="testStringToInteger_leadingSpacesAndSign" />
+       <option name="TEST_OBJECT" value="method" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration name="StringUtilsTest.testStringToInteger_signThenInvalidCharacter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++    <configuration name="StringUtilsTest.testStringToInteger_underflow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="software-testing-hw1" />
+       <option name="PACKAGE_NAME" value="" />
+       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
+-      <option name="METHOD_NAME" value="testStringToInteger_signThenInvalidCharacter" />
++      <option name="METHOD_NAME" value="testStringToInteger_underflow" />
+       <option name="TEST_OBJECT" value="method" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration name="StringUtilsTest.testStringToInteger_simpleNegative" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++    <configuration name="TestIsValidSudoku.testIsValidSudoku" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="software-testing-hw1" />
+       <option name="PACKAGE_NAME" value="" />
+-      <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
+-      <option name="METHOD_NAME" value="testStringToInteger_simpleNegative" />
++      <option name="MAIN_CLASS_NAME" value="TestIsValidSudoku" />
++      <option name="METHOD_NAME" value="testIsValidSudoku(char[][],boolean)" />
+       <option name="TEST_OBJECT" value="method" />
+       <method v="2">
+         <option name="Make" enabled="true" />
+@@ -112,13 +131,21 @@
+     </configuration>
+     <recent_temporary>
+       <list>
+-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_emptyString" />
++        <item itemvalue="JUnit.TestIsValidSudoku.testIsValidSudoku" />
++        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_leadingSpacesAndSign" />
++        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_underflow" />
+         <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_allSpaces" />
+-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_signThenInvalidCharacter" />
+         <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_leadingSpaces" />
+-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_simpleNegative" />
+       </list>
+     </recent_temporary>
++  </component>
++  <component name="SharedIndexes">
++    <attachedChunks>
++      <set>
++        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
++        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
++      </set>
++    </attachedChunks>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -129,7 +156,8 @@
+       <option name="presentableId" value="Default" />
+       <updated>1739645161078</updated>
+       <workItem from="1739645162094" duration="9366000" />
+-      <workItem from="1739718986728" duration="14840000" />
++      <workItem from="1739718986728" duration="26186000" />
++      <workItem from="1739997855292" duration="714000" />
+     </task>
+     <task id="LOCAL-00001" summary="hw1-task1 completed">
+       <option name="closed" value="true" />
+@@ -147,7 +175,23 @@
+       <option name="project" value="LOCAL" />
+       <updated>1739731923433</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="hw1-finished task two mostly">
++      <option name="closed" value="true" />
++      <created>1739840894219</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1739840894219</updated>
++    </task>
++    <task id="LOCAL-00004" summary="added task 3">
++      <option name="closed" value="true" />
++      <created>1739841024075</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1739841024075</updated>
++    </task>
++    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -156,7 +200,9 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="hw1-task1 completed" />
+     <MESSAGE value="hw1-added task two" />
+-    <option name="LAST_COMMIT_MESSAGE" value="hw1-added task two" />
++    <MESSAGE value="hw1-finished task two mostly" />
++    <MESSAGE value="added task 3" />
++    <option name="LAST_COMMIT_MESSAGE" value="added task 3" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>
+Index: src/test/java/TestIsValidSudoku.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/TestIsValidSudoku.java b/src/test/java/TestIsValidSudoku.java
+new file mode 100644
+--- /dev/null	(date 1739922456580)
++++ b/src/test/java/TestIsValidSudoku.java	(date 1739922456580)
+@@ -0,0 +1,246 @@
++import static org.junit.jupiter.api.Assertions.assertEquals;
++
++import java.util.stream.Stream;
++
++import org.example.Sudoku;
++import org.junit.jupiter.params.ParameterizedTest;
++import org.junit.jupiter.params.provider.Arguments;
++import org.junit.jupiter.params.provider.MethodSource;
++
++public class TestIsValidSudoku {
++  @ParameterizedTest
++  @MethodSource("provideSudokuBoards")
++  void testIsValidSudoku(char[][] board, boolean expectedResult) {
++    boolean actualResult = Sudoku.isValidSudoku(board);
++    assertEquals(expectedResult, actualResult);
++  }
++
++  /**
++   * Provide multiple test cases (boards and their expected validity).
++   */
++  private static Stream<Arguments> provideSudokuBoards() {
++    return Stream.of(
++        // Test Case 1: Completely empty board
++        Arguments.of(
++            new char[][] {
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            true
++        ),
++
++        // Test Case 2: Duplicate in the same row
++        // Row 0 contains two '1's
++        Arguments.of(
++            new char[][] {
++                {'1','1','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++        // Test Case 3: Duplicate in the same column
++        // Column 0 contains two '2's
++        Arguments.of(
++            new char[][] {
++                {'2','.','.','.','.','.','.','.','.'},
++                {'2','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++        // Test Case 4: Duplicate in the same 3×3 box
++        // Top-left box has two '3's (positions (0,0) and (1,1))
++        Arguments.of(
++            new char[][] {
++                {'3','.','.','.','.','.','.','.','.'},
++                {'.','3','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++        // Test Case 5: A valid partially filled board
++        // (No duplicates; each filled cell is unique in row, column, box)
++        Arguments.of(
++            new char[][] {
++                {'5','3','.','.','7','.','.','.','.'},
++                {'6','.','.','1','9','5','.','.','.'},
++                {'.','9','8','.','.','.','.','6','.'},
++                {'8','.','.','.','6','.','.','.','3'},
++                {'4','.','.','8','.','3','.','.','1'},
++                {'7','.','.','.','2','.','.','.','6'},
++                {'.','6','.','.','.','.','2','8','.'},
++                {'.','.','.','4','1','9','.','.','5'},
++                {'.','.','.','.','8','.','.','7','9'}
++            },
++            true
++        ),
++
++        // Test Case 6: A valid completed Sudoku
++         Arguments.of(
++            new char[][] {
++                {'5','3','4','6','7','8','9','1','2'},
++                {'6','7','2','1','9','5','3','4','8'},
++                {'1','9','8','3','4','2','5','6','7'},
++                {'8','5','9','7','6','1','4','2','3'},
++                {'4','2','6','8','5','3','7','9','1'},
++                {'7','1','3','9','2','4','8','5','6'},
++                {'9','6','1','5','3','7','2','8','4'},
++                {'2','8','7','4','1','9','6','3','5'},
++                {'3','4','5','2','8','6','1','7','9'}
++            },
++            true
++         ),
++
++        // Test Case 7: Multiple duplicates in the same row
++        // Row 0 has '1' repeated 3 times
++        Arguments.of(
++            new char[][] {
++                {'1','1','1','.','.','.','.','.','.'},  // Multiple '1's in row 0
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++
++        // Test Case 8: Duplicates in different rows
++        // Row 0 has two '4's, row 1 has two '5's
++        Arguments.of(
++            new char[][] {
++                {'4','4','.','.','.','.','.','.','.'},  // Row 0 has duplicate '4'
++                {'5','5','.','.','.','.','.','.','.'},  // Row 1 has duplicate '5'
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++        // Test Case 9: Duplicates in both a row and a box
++        //   - Row 0 has two '1's
++        //   - Also, the top-left box would have the same '1' repeated
++        Arguments.of(
++            new char[][] {
++                {'1','1','.','.','.','.','.','.','.'},
++                {'1','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++        // Test Case 10: A violation in the bottom-right 3×3
++        Arguments.of(
++            new char[][] {
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','8','.','.'},
++                {'.','.','.','.','.','.','.','8','.'}, // Duplicate '8' in bottom-right box
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++        // Test Case 11: One row is perfect (1..9), but another row has duplicates
++        Arguments.of(
++            new char[][] {
++                // Row 0 is a full valid row from 1..9
++                {'1','2','3','4','5','6','7','8','9'},
++                {'.','3','3','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        ),
++
++        // Test Case 12: A valid board
++        Arguments.of(
++            new char[][] {
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','8','.','.','.'},
++                {'.','.','.','.','.','.','8','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            true
++        ),
++
++        // Test Case 13: Non integer board
++        Arguments.of(
++            new char[][] {
++                {'1','a','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'},
++                {'.','.','.','.','.','.','.','.','.'}
++            },
++            false
++        )
++
++
++
++
++    );
++  }
++
++
++}
+Index: src/main/java/org/example/SudokuFixed.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/SudokuFixed.java b/src/main/java/org/example/SudokuFixed.java
+new file mode 100644
+--- /dev/null	(date 1739974034855)
++++ b/src/main/java/org/example/SudokuFixed.java	(date 1739974034855)
+@@ -0,0 +1,57 @@
++package org.example;
++
++import java.util.HashMap;
++
++public class SudokuFixed {
++    /**
++     * This method determine if a given 9 x 9 task3. Sudoku board of characters is valid. Only the filled cells
++     * need
++     * to be validated
++     * according to the following rules:
++     * 1. Each row has the digits 1-9 without repetition.
++     * 2. Each column has the digits 1-9 without repetition.
++     * 3. Each of the nine 3 x 3 sub-boxes of the grid has the digits 1-9 without repetition.
++     * Also, note that:
++     * 1. A task3.Sudoku board (partially filled) could be valid but is not necessarily solvable.
++     * 2. Only the filled cells need to be validated according to the mentioned rules.
++     * @param board a char-typed 2d array representing the board, '.' indicating empty cell
++     * @return true if valid, false otherwise.
++     */
++    public static boolean isValidSudoku(char[][] board) {
++        // init data
++        HashMap<Integer, Integer>[] rows = new HashMap[9];
++        HashMap<Integer, Integer> [] columns = new HashMap[9];
++        HashMap<Integer, Integer> [] boxes = new HashMap[9];
++        for (int i = 0; i < 9; i++) {
++            rows[i] = new HashMap<Integer, Integer>();
++            columns[i] = new HashMap<Integer, Integer>();
++            boxes[i] = new HashMap<Integer, Integer>();
++        }
++
++        // validate a board
++        for (int i = 0; i < 9; i++) {
++            for (int j = 0; j < 9; j++) {
++                char num = board[i][j];
++                if (num != '.') {
++                    if (num < '1' || num > '9') {
++                        // Invalid input (not a digit 1–9).
++                        return false;
++                    }
++                    int n = (int)num;
++                    int box_index = (i / 3 ) * 3 + j / 3;
++
++                    // keep the current cell value
++                    rows[i].put(n, rows[i].getOrDefault(n, 0) + 1);
++                    columns[j].put(n, columns[j].getOrDefault(n, 0) + 1);
++                    boxes[box_index].put(n, boxes[box_index].getOrDefault(n, 0) + 1);
++
++                    // check if this value has been already seen before
++                    if (rows[i].get(n) > 1 || columns[j].get(n) > 1 || boxes[box_index].get(n) > 1)
++                        return false;
++                }
++            }
++        }
++
++        return true;
++    }
++}
+\ No newline at end of file

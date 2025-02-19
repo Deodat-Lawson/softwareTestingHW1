@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="added coverage" />
+    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="hw1-added task two">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/SudokuFixed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestIsValidSudoku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,18 +25,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Deodat-Lawson"
-  }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Deodat-Lawson/softwareTestingHW1.git",
-    "accountId": "14fd471d-0bb3-4c9b-83f6-91221821a092"
-  }
-}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -44,29 +37,19 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "JUnit.StringUtilsTest.executor": "Coverage",
-    "JUnit.StringUtilsTest.testCompress_singleChar_returnsOriginalString.executor": "Coverage",
-    "JUnit.StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar.executor": "Coverage",
-    "JUnit.StringUtilsTest.testIsPermutation_invalidPermutationRepetition.executor": "Coverage",
-    "JUnit.StringUtilsTest.testIsPermutation_lengthMismatch.executor": "Coverage",
-    "JUnit.StringUtilsTest.testStringToInteger_overflow.executor": "Coverage",
-    "JUnit.StringUtilsTest.testStringToInteger_simplePositive.executor": "Coverage",
-    "JUnit.StringUtilsTest.testStringToInteger_zero.executor": "Coverage",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/timot/IdeaProjects/software-testing-hw1/src/main/java/org/example",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -78,7 +61,7 @@
       <recent name="C:\Users\timot\IdeaProjects\software-testing-hw1\libs" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar">
+  <component name="RunManager" selected="JUnit.StringUtilsTest">
     <configuration name="StringUtilsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
@@ -88,63 +71,54 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_allSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testIsPermutationOfPalindrome_nonASCIIChar" />
+      <option name="METHOD_NAME" value="testStringToInteger_allSpaces" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testIsPermutation_invalidPermutationRepetition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_emptyString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testIsPermutation_invalidPermutationRepetition" />
+      <option name="METHOD_NAME" value="testStringToInteger_emptyString" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testStringToInteger_simplePositive" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_signThenInvalidCharacter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testStringToInteger_simplePositive" />
+      <option name="METHOD_NAME" value="testStringToInteger_signThenInvalidCharacter" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testStringToInteger_zero" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestIsValidSudoku" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testStringToInteger_zero" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="TestIsValidSudoku" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar" />
         <item itemvalue="JUnit.StringUtilsTest" />
-        <item itemvalue="JUnit.StringUtilsTest.testIsPermutation_invalidPermutationRepetition" />
-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_zero" />
-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_simplePositive" />
+        <item itemvalue="JUnit.TestIsValidSudoku" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_emptyString" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_allSpaces" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_signThenInvalidCharacter" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -156,9 +130,6 @@
       <updated>1739645161078</updated>
       <workItem from="1739645162094" duration="9366000" />
       <workItem from="1739718986728" duration="14840000" />
-      <workItem from="1739989903835" duration="383000" />
-      <workItem from="1739990321752" duration="121000" />
-      <workItem from="1739990756301" duration="3323000" />
     </task>
     <task id="LOCAL-00001" summary="hw1-task1 completed">
       <option name="closed" value="true" />
@@ -176,15 +147,7 @@
       <option name="project" value="LOCAL" />
       <updated>1739731923433</updated>
     </task>
-    <task id="LOCAL-00003" summary="added coverage">
-      <option name="closed" value="true" />
-      <created>1739999333880</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1739999333880</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,8 +156,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="hw1-task1 completed" />
     <MESSAGE value="hw1-added task two" />
-    <MESSAGE value="added coverage" />
-    <option name="LAST_COMMIT_MESSAGE" value="added coverage" />
+    <option name="LAST_COMMIT_MESSAGE" value="hw1-added task two" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -224,17 +186,5 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testStringToInteger_emptyString.ic" NAME="StringUtilsTest.testStringToInteger_emptyString Coverage Results" MODIFIED="1739989994257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testStringToInteger_zero.ic" NAME="StringUtilsTest.testStringToInteger_zero Coverage Results" MODIFIED="1739992061741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest.ic" NAME="StringUtilsTest Coverage Results" MODIFIED="1739993227651" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testCompress_singleChar_returnsOriginalString.ic" NAME="StringUtilsTest.testCompress_singleChar_returnsOriginalString Coverage Results" MODIFIED="1739990972900" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testCompress_nullInput_throwsNullPointerException.ic" NAME="StringUtilsTest.testCompress_nullInput_throwsNullPointerException Coverage Results" MODIFIED="1739990166335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testIsPermutationOfPalindrome_nonASCIIChar.ic" NAME="StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar Coverage Results" MODIFIED="1739993302839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testStringToInteger_overflow.ic" NAME="StringUtilsTest.testStringToInteger_overflow Coverage Results" MODIFIED="1739991686584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testStringToInteger_simplePositive.ic" NAME="StringUtilsTest.testStringToInteger_simplePositive Coverage Results" MODIFIED="1739991737690" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testIsPermutation_invalidPermutationRepetition.ic" NAME="StringUtilsTest.testIsPermutation_invalidPermutationRepetition Coverage Results" MODIFIED="1739992815439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/softwareTestingHW1$StringUtilsTest_testIsPermutation_lengthMismatch.ic" NAME="StringUtilsTest.testIsPermutation_lengthMismatch Coverage Results" MODIFIED="1739991237606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

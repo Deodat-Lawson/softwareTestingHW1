@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.HashMap;
 
-public class Sudoku {
+public class SudokuFixed {
     /**
      * This method determine if a given 9 x 9 task3. Sudoku board of characters is valid. Only the filled cells
      * need
@@ -33,6 +33,10 @@ public class Sudoku {
             for (int j = 0; j < 9; j++) {
                 char num = board[i][j];
                 if (num != '.') {
+                    if (num < '1' || num > '9') {
+                        // Invalid input (not a digit 1–9).
+                        return false;
+                    }
                     int n = (int)num;
                     int box_index = (i / 3 ) * 3 + j / 3;
 
