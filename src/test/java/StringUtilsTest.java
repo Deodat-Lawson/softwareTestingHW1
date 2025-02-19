@@ -1,19 +1,16 @@
-
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.StringUtils;
-import org.example.StringUtilsFixed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class StringUtilsTest {
 
-  private StringUtilsFixed su;
+  private StringUtils su;
 
   @BeforeEach
   void setUp() {
-    su = new StringUtilsFixed();
+    su = new StringUtils();
   }
 
   // --------------------------------------------------------
@@ -157,6 +154,8 @@ class StringUtilsTest {
     // "abc" and "ab" have different lengths, so the method returns false.
     boolean result = su.isPermutation("abc", "ab");
     assertFalse(result);
+    boolean result2 = su.isPermutation("xyz", "xy");
+    assertFalse(result2);
   }
 
   /**
@@ -191,6 +190,16 @@ class StringUtilsTest {
     assertFalse(result);
   }
 
+  @Test
+  void testIsPermutation_invalidPermutationRepetition() {
+    // "abc" and "abd" have the same length but different characters.
+    // If implemented correctly, the method should return false.
+    boolean result = su.isPermutation("abccc", "abbbb");
+    assertFalse(result);
+  }
+
+
+
   /**
    * Test: Attempt to trigger the branch where letters[c] < 0.
    * Branches covered:
@@ -221,6 +230,8 @@ class StringUtilsTest {
     });
   }
 
+
+
   /**
    * Test: All distinct characters.
    * Branch covered:
@@ -235,6 +246,14 @@ class StringUtilsTest {
     boolean result = su.isPermutationOfPalindrome("abc");
     assertFalse(result);
   }
+
+  @Test
+  void testIsPermutationOfPalindrome_nonASCIIChar() {
+    // "abc" yields countOdd = 3 (one for each letter), so it is not a permutation of a palindrome.
+    boolean result = su.isPermutationOfPalindrome("~{@()$%($(abc!?!");
+    assertFalse(result);
+  }
+
 
   /**
    * Test: Simple palindrome.
@@ -266,6 +285,7 @@ class StringUtilsTest {
     boolean result = su.isPermutationOfPalindrome("A1bc");
     assertFalse(result);
   }
+
 
   /**
    * Test: Example where the input is a permutation of a palindrome.
@@ -311,9 +331,36 @@ class StringUtilsTest {
    */
   @Test
   void testStringToInteger_simplePositive() {
+
     String input = "123";
     int result = su.stringToInteger(input);
     assertEquals(123, result);
+
+    String input3 = "0";
+    int result3 = su.stringToInteger(input3);
+    assertEquals(0, result3);
+
+  }
+
+  /**
+   *
+   */
+  @Test
+  void testStringToInteger_plusSign() {
+    String input2 = "+123";
+    int result2 = su.stringToInteger(input2);
+    assertEquals(123, result2);
+  }
+
+
+  /**
+   *
+   */
+  @Test
+  void testStringToInteger_zero() {
+    String input3 = "0";
+    int result3 = su.stringToInteger(input3);
+    assertEquals(0, result3);
   }
 
   /**

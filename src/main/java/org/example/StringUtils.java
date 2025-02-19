@@ -86,7 +86,7 @@ public class StringUtils {
 	
 	/** IGNORE THIS ONE: This method does not need to be tested. 
 	 * Auxiliary method used by isPermutationOfPalindrome.
-	 * @param c
+	 * @param
 	 * @return
 	 */
 	private int getCharNumber(Character c) {
@@ -126,6 +126,7 @@ public class StringUtils {
 	    while (index < len && str.charAt(index) == ' ') {
 	        index++;
 	    }
+
 	    if (index > len) {
 	        return 0;
 	    }
@@ -143,9 +144,11 @@ public class StringUtils {
 	        if (total > (Integer.MAX_VALUE + digit) / 10 || total < (Integer.MIN_VALUE - digit) / 10) {
 	            return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 	        }
+
 	        total = 10 * total + sign * digit;
 	        index++;
 	    }
+
 	    return total;
 	}
 }
