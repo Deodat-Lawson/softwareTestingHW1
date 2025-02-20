@@ -18,6 +18,14 @@ public class SudokuFixed {
      * @return true if valid, false otherwise.
      */
     public static boolean isValidSudoku(char[][] board) {
+        if (board == null || board.length != 9) {
+            return false;
+        }
+          for (char[] chars : board) {
+            if (chars == null || chars.length != 9) {
+              return false;
+            }
+          }
         // init data
         HashMap<Integer, Integer>[] rows = new HashMap[9];
         HashMap<Integer, Integer> [] columns = new HashMap[9];

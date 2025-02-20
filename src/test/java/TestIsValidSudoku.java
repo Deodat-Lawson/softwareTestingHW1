@@ -88,7 +88,7 @@ public class TestIsValidSudoku {
         ),
 
         // Test Case 5: A valid partially filled board
-        // (No duplicates; each filled cell is unique in row, column, box)
+        // (No duplicates; each filled cell is unique in row, column, and box)
         Arguments.of(
             new char[][] {
                 {'5','3','.','.','7','.','.','.','.'},
@@ -105,7 +105,7 @@ public class TestIsValidSudoku {
         ),
 
         // Test Case 6: A valid completed Sudoku
-         Arguments.of(
+        Arguments.of(
             new char[][] {
                 {'5','3','4','6','7','8','9','1','2'},
                 {'6','7','2','1','9','5','3','4','8'},
@@ -118,7 +118,7 @@ public class TestIsValidSudoku {
                 {'3','4','5','2','8','6','1','7','9'}
             },
             true
-         ),
+        ),
 
         // Test Case 7: Multiple duplicates in the same row
         // Row 0 has '1' repeated 3 times
@@ -137,7 +137,6 @@ public class TestIsValidSudoku {
             false
         ),
 
-
         // Test Case 8: Duplicates in different rows
         // Row 0 has two '4's, row 1 has two '5's
         Arguments.of(
@@ -154,9 +153,10 @@ public class TestIsValidSudoku {
             },
             false
         ),
+
         // Test Case 9: Duplicates in both a row and a box
         //   - Row 0 has two '1's
-        //   - Also, the top-left box would have the same '1' repeated
+        //   - Also, the top-left box contains the repeated '1'
         Arguments.of(
             new char[][] {
                 {'1','1','.','.','.','.','.','.','.'},
@@ -187,6 +187,7 @@ public class TestIsValidSudoku {
             },
             false
         ),
+
         // Test Case 11: One row is perfect (1..9), but another row has duplicates
         Arguments.of(
             new char[][] {
@@ -204,7 +205,7 @@ public class TestIsValidSudoku {
             false
         ),
 
-        // Test Case 12: A valid board
+        // Test Case 12: A valid board with minimal entries
         Arguments.of(
             new char[][] {
                 {'.','.','.','.','.','.','.','.','.'},
@@ -220,7 +221,7 @@ public class TestIsValidSudoku {
             true
         ),
 
-        // Test Case 13: Non integer board
+        // Test Case 13: Non integer board (invalid character 'a')
         Arguments.of(
             new char[][] {
                 {'1','a','.','.','.','.','.','.','.'},
@@ -234,13 +235,73 @@ public class TestIsValidSudoku {
                 {'.','.','.','.','.','.','.','.','.'}
             },
             false
+        ),
+
+        // Additional Test Cases for invalid board lengths and characters
+
+        // Test Case 14: Board with less than 9 rows (8 rows)
+        Arguments.of(
+            new char[][] {
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'}
+            },
+            false
+        ),
+
+        // Test Case 15: Board with more than 9 rows (10 rows)
+        Arguments.of(
+            new char[][] {
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'}
+            },
+            false
+        ),
+
+        // Test Case 16: Board with a row that has less than 9 columns (one row with 8 columns)
+        Arguments.of(
+            new char[][] {
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'}
+            },
+            false
+        ),
+
+        // Test Case 17: Board with an invalid character '*' in an otherwise valid configuration
+        Arguments.of(
+            new char[][] {
+                {'5','3','.','.','7','.','.','.','.'},
+                {'6','.','.','1','9','5','.','.','.'},
+                {'.','9','8','.','.','.','.','6','.'},
+                {'8','.','.','.','6','.','.','.','3'},
+                {'4','.','.','8','.','3','.','.','1'},
+                {'7','.','.','.','2','.','.','.','6'},
+                {'.','6','.','.','.','.','2','8','.'},
+                {'.','.','.','4','1','9','.','.','5'},
+                {'.','.','.','.','8','.','.','7','*'}
+            },
+            false
         )
-
-
-
-
     );
   }
-
-
 }

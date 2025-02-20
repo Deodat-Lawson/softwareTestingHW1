@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="hw1-added task two">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/SudokuFixed.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/TestIsValidSudoku.java" afterDir="false" />
+    <list default="true" id="04520427-9fd3-4bb1-ac57-286014f7c6c3" name="Changes" comment="updated sudoku">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Sudoku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/SudokuFixed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/SudokuFixed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/BuggleSortTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/BuggleSortTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/StringUtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestIsValidSudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestIsValidSudoku.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +38,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.BuggleSortTest.SingleElementDescendingTest.executor": "Run",
+    "JUnit.BuggleSortTest.SingleElementTest.executor": "Run",
     "JUnit.StringUtilsTest.executor": "Coverage",
+    "JUnit.StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar.executor": "Run",
+    "JUnit.StringUtilsTest.testIsPermutation_invalidPermutation.executor": "Run",
+    "JUnit.StringUtilsTest.testStringToInteger_simpleNegative.executor": "Run",
+    "JUnit.TestIsValidSudoku.executor": "Coverage",
+    "JUnit.TestIsValidSudoku.testIsValidSudoku.executor": "Coverage",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -62,50 +71,57 @@
     </key>
   </component>
   <component name="RunManager" selected="JUnit.StringUtilsTest">
+    <configuration name="BuggleSortTest.SingleElementDescendingTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="software-testing-hw1" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BuggleSortTest" />
+      <option name="METHOD_NAME" value="SingleElementDescendingTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="StringUtilsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.StringUtilsTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testStringToInteger_allSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testStringToInteger_allSpaces" />
+      <option name="METHOD_NAME" value="testIsPermutationOfPalindrome_nonASCIIChar" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testStringToInteger_emptyString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testIsPermutation_invalidPermutation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testStringToInteger_emptyString" />
+      <option name="METHOD_NAME" value="testIsPermutation_invalidPermutation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringUtilsTest.testStringToInteger_signThenInvalidCharacter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StringUtilsTest.testStringToInteger_simpleNegative" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="software-testing-hw1" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="StringUtilsTest" />
-      <option name="METHOD_NAME" value="testStringToInteger_signThenInvalidCharacter" />
+      <option name="METHOD_NAME" value="testStringToInteger_simpleNegative" />
       <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestIsValidSudoku" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="software-testing-hw1" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestIsValidSudoku" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -113,10 +129,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.StringUtilsTest" />
-        <item itemvalue="JUnit.TestIsValidSudoku" />
-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_emptyString" />
-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_allSpaces" />
-        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_signThenInvalidCharacter" />
+        <item itemvalue="JUnit.StringUtilsTest.testIsPermutationOfPalindrome_nonASCIIChar" />
+        <item itemvalue="JUnit.StringUtilsTest.testStringToInteger_simpleNegative" />
+        <item itemvalue="JUnit.StringUtilsTest.testIsPermutation_invalidPermutation" />
+        <item itemvalue="JUnit.BuggleSortTest.SingleElementDescendingTest" />
       </list>
     </recent_temporary>
   </component>
@@ -147,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739731923433</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="updated sudoku">
+      <option name="closed" value="true" />
+      <created>1740002064744</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1740002064744</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,14 +180,15 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="hw1-task1 completed" />
     <MESSAGE value="hw1-added task two" />
-    <option name="LAST_COMMIT_MESSAGE" value="hw1-added task two" />
+    <MESSAGE value="updated sudoku" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated sudoku" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/BuggleSortTest.java</url>
-          <line>217</line>
+          <line>216</line>
           <properties class="BuggleSortTest" method="NormalDescendingTest1">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -186,5 +211,12 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/software_testing_hw1$TestIsValidSudoku.ic" NAME="TestIsValidSudoku Coverage Results" MODIFIED="1740001967876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/software_testing_hw1$TestIsValidSudoku_testIsValidSudoku.ic" NAME="TestIsValidSudoku.testIsValidSudoku Coverage Results" MODIFIED="1740002634356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/software_testing_hw1$StringUtilsTest.ic" NAME="StringUtilsTest Coverage Results" MODIFIED="1740009838257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>org.example.*</FILTER>
+    </SUITE>
   </component>
 </project>

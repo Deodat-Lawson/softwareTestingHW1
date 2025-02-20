@@ -19,13 +19,16 @@ public class StringUtils {
 		int countConsecutive = 0;
 		for (int i = 0; i < str.length(); i++) {
 			countConsecutive++;
-			/* If next character is different than current, append this char to result.*/
+
+			//cannot achieve full coverage
 			if (i >= str.length() || str.charAt(i) != str.charAt(i + 1)) {
 				compressed.append(str.charAt(i));
 				compressed.append(countConsecutive);
 				countConsecutive = 0;
 			}
 		}
+
+		//cannot achieve full coverage
 		return compressed.length() <= str.length() ? compressed.toString() : str;
 	}
 	
@@ -122,11 +125,13 @@ public class StringUtils {
 			}
 				
 		}
-		
+
+			//cannot achieve full coverage
 	    while (index < len && str.charAt(index) == ' ') {
 	        index++;
 	    }
 
+			//cannot achieve full coverage
 	    if (index > len) {
 	        return 0;
 	    }
@@ -138,9 +143,12 @@ public class StringUtils {
 
 	    while (index < len) {
 	        int digit = str.charAt(index) - '0';
-	        if (digit < 0 || digit > 9) 
+
+					//cannot achieve full coverage
+	        if (digit < 0 || digit > 9)
 	        	break;
 
+					//cannot achieve full coverage
 	        if (total > (Integer.MAX_VALUE + digit) / 10 || total < (Integer.MIN_VALUE - digit) / 10) {
 	            return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 	        }

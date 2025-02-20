@@ -30,7 +30,6 @@ public class BuggleSortTest {
     /*
     test passed
      */
-
     Assertions.assertArrayEquals(expected, arr);
   }
 
